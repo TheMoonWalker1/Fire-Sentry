@@ -9,6 +9,7 @@
     <div class="container mt-5">
         <h1 class="text-center mb-5">PLACEHOLDER</h1>
         <div class="form-group">
+            {% csrf_token %}
             <label for="autocomplete">Enter your address:</label>
             <input id="autocomplete" class="form-control" type="text" />
         </div>
@@ -64,32 +65,33 @@
             } else {
                 console.log("Geocoding failed with status: " + response.status);
             }
+            // preventing from page reload and default actions
+            // e.preventDefault();
+            // serialize the data for sending the form data.
+            // make POST ajax call
+                console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'predict' %}",
+                data: {coord_ns: coord_ns, coord_ew: coord_ew, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success: function (response) {
+                    // on successfull creating object
+                    // 1. clear the form.
+                    $("#autocomplete").trigger('reset');
+                    // 2. focus to nickname input
+                    // $("#id_nick_name").focus();
 
-            // Create an AJAX request object
-            var xhr = new XMLHttpRequest();
+                    // display the newly friend to table.
+                    console.log(response);
+                    var prediction = JSON.parse(response["prediction"]);
+                    $("#result").innerHTML = prediction;
 
-            // Define the URL that the AJAX request will be sent to
-            var url = "/api/predict";
-
-            // Define the data to be sent in the AJAX request as a URL-encoded string
-            var data = "coord_ns=" + encodeURIComponent(coord_ns) + "&coord_ew=" + encodeURIComponent(coord_ew);
-
-            // Open the AJAX request with the HTTP POST method
-            xhr.open("POST", url, true);
-
-            // Set the Content-Type header to indicate that the data being sent is URL-encoded
-            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-
-            // Define a callback function to handle the AJAX response
-            xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Handle the response here
-                console.log(xhr.responseText);
-            }
-            };
-
-            // Send the AJAX request with the data
-            xhr.send(data);
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    $("#result").innerHTML = "Error Occurred, please try again";
+                }
+            })
             };
         }
     </script>

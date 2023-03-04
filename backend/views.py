@@ -57,8 +57,10 @@ def fire_probability(request):
     ## Process Coordinates
 
     ndvi_value, lst_value, ta_value = get_data(request.POST.get("coord_ns"), request.POST.get("coord_ew"))
-
+    print(ndvi_value)
+    print(lst_value)
+    print(ta_value)
     predictions = rf.predict(pd.DataFrame(np.array([[ndvi_value, lst_value, ta_value]])))
-
-    return JsonResponse(predictions[0])
+    print(predictions[0])
+    return JsonResponse({"prediction" : predictions[0]})
 
