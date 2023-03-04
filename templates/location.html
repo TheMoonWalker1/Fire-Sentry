@@ -1,0 +1,96 @@
+{% extends "template.html" %}
+
+{% block css %}
+    <title>Google Places API Autocomplete Address Bar</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-5">PLACEHOLDER</h1>
+        <div class="form-group">
+            <label for="autocomplete">Enter your address:</label>
+            <input id="autocomplete" class="form-control" type="text" />
+        </div>
+        <button class="btn btn-primary" onclick="getInputValue()">Get input Value</button>
+        <!-- <div class="form-group mt-5">
+            <label for="street-address">Street Address:</label>
+            <input id="street-address" class="form-control" type="text" readonly />
+        </div> -->
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag&libraries=places"></script>
+    <script>
+        // Initialize the autocomplete object
+        var autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById("autocomplete")
+        );
+
+        function getInputValue() {
+            // Get the value of the autocomplete input element
+            var address = document.getElementById("autocomplete").value;
+            console.log("Input Value: " + address);
+            var coord_ns = 0;
+            var coord_ew = 0;
+            // Use the Geocoding API to convert the address to coordinates
+            var geocodingApiUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+            var address = address;
+            var apiKey = "AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag";
+
+            // Create a URL for the Geocoding API with the address and API key
+            var requestUrl = geocodingApiUrl + encodeURIComponent(address) + "&key=" + apiKey;
+
+            // Make a request to the Geocoding API using XMLHttpRequest
+            var request = new XMLHttpRequest();
+            request.open("GET", requestUrl);
+            request.responseType = "json";
+            request.send();
+
+            // Handle the response from the Geocoding API
+            request.onload = function() {
+            var response = request.response;
+
+            // Check if the Geocoding API returned a valid response
+            if (response.status === "OK") {
+                // Get the coordinates from the response
+                var location = response.results[0].geometry.location;
+                var latitude = location.lat;
+                var longitude = location.lng;
+                coord_ns = latitude;
+                coord_ew = longitude;
+
+                // Do something with the coordinates, like display them on a map
+                console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+            } else {
+                console.log("Geocoding failed with status: " + response.status);
+            }
+
+            // Create an AJAX request object
+            var xhr = new XMLHttpRequest();
+
+            // Define the URL that the AJAX request will be sent to
+            var url = "/api/predict";
+
+            // Define the data to be sent in the AJAX request as a URL-encoded string
+            var data = "coord_ns=" + encodeURIComponent(coord_ns) + "&coord_ew=" + encodeURIComponent(coord_ew);
+
+            // Open the AJAX request with the HTTP POST method
+            xhr.open("POST", url, true);
+
+            // Set the Content-Type header to indicate that the data being sent is URL-encoded
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            // Define a callback function to handle the AJAX response
+            xhr.onreadystatechange = function() {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Handle the response here
+                console.log(xhr.responseText);
+            }
+            };
+
+            // Send the AJAX request with the data
+            xhr.send(data);
+            };
+        }
+    </script>
+{% endblock %}
