@@ -13,6 +13,7 @@
             <label for="autocomplete">Enter your address:</label>
             <input id="autocomplete" class="form-control" type="text" />
         </div>
+        <p id="result"></p>
         <button class="btn btn-primary" onclick="getInputValue()">Get input Value</button>
         <!-- <div class="form-group mt-5">
             <label for="street-address">Street Address:</label>
@@ -62,15 +63,7 @@
 
                 // Do something with the coordinates, like display them on a map
                 console.log("Latitude: " + latitude + ", Longitude: " + longitude);
-            } else {
-                console.log("Geocoding failed with status: " + response.status);
-            }
-            // preventing from page reload and default actions
-            // e.preventDefault();
-            // serialize the data for sending the form data.
-            // make POST ajax call
-                console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
-            $.ajax({
+                $.ajax({
                 type: 'POST',
                 url: "{% url 'predict' %}",
                 data: {coord_ns: coord_ns, coord_ew: coord_ew, csrfmiddlewaretoken: '{{ csrf_token }}'},
@@ -84,14 +77,23 @@
                     // display the newly friend to table.
                     console.log(response);
                     var prediction = JSON.parse(response["prediction"]);
-                    $("#result").innerHTML = prediction;
+                    document.getElementById("result").innerHTML = prediction;
 
                 },
                 error: function (response) {
                     // alert the error if any error occured
-                    $("#result").innerHTML = "Error Occurred, please try again";
+                    document.getElementById("result").innerHTML = "Error Occurred, please try again";
                 }
             })
+            } else {
+                console.log("Geocoding failed with status: " + response.status);
+            }
+            // preventing from page reload and default actions
+            // e.preventDefault();
+            // serialize the data for sending the form data.
+            // make POST ajax call
+            //     console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
+
             };
         }
     </script>
