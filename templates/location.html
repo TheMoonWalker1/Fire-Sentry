@@ -14,10 +14,13 @@
             <input id="autocomplete" class="form-control" type="text" />
         </div>
         <button class="btn btn-primary" onclick="getInputValue()">Get input Value</button>
-        <!-- <div class="form-group mt-5">
-            <label for="street-address">Street Address:</label>
-            <input id="street-address" class="form-control" type="text" readonly />
-        </div> -->
+        <div class="form-group">
+            <label for="Latitude">Latitude:</label>
+            <input id="Latitude" class="form-control" type="text" />
+            <label for="Longitude">Longitude:</label>
+            <input id="Longitude" class="form-control" type="text" />
+        </div>
+        <button class="btn btn-primary" onclick="getCoordinates()">Get input Value</button>
     </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag&libraries=places"></script>
@@ -69,6 +72,10 @@
             // e.preventDefault();
             // serialize the data for sending the form data.
             // make POST ajax call
+            if (coord_ns == "" || coord_ew == "") {
+                console.log("Please enter coordinates");
+            }
+            if(is_in_us(latitude, longitude)){
                 console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
             $.ajax({
                 type: 'POST',
@@ -92,7 +99,79 @@
                     $("#result").innerHTML = "Error Occurred, please try again";
                 }
             })
+            }
+            else{
+                console.log("Coordinates are not in US");
+            }
+                
             };
         }
+        function getCoordinates() {
+            var coord_ns = document.getElementById("Latitude").value;
+            var coord_ew = document.getElementById("Longitude").value;
+            if (coord_ns == "" || coord_ew == "") {
+                console.log("Please enter coordinates");
+            }
+            //check if coordinates are in US
+            var latitude = coord_ns;
+            var longitude = coord_ew;
+            console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+            console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
+            if(is_in_us(latitude, longitude)){
+                $.ajax({
+                type: 'POST',
+                url: "{% url 'predict' %}",
+                data: {coord_ns: coord_ns, coord_ew: coord_ew, csrfmiddlewaretoken: '{{ csrf_token }}'},
+                success: function (response) {
+                    // on successfull creating object
+                    // 1. clear the form.
+                    $("#autocomplete").trigger('reset');
+                    // 2. focus to nickname input
+                    // $("#id_nick_name").focus();
+
+                    // display the newly friend to table.
+                    console.log(response);
+                    var prediction = JSON.parse(response["prediction"]);
+                    $("#result").innerHTML = prediction;
+
+                },
+                error: function (response) {
+                    // alert the error if any error occured
+                    $("#result").innerHTML = "Error Occurred, please try again";
+                }
+                })
+            }
+            else{
+                console.log("Coordinates are not in US");
+            }
+            
+            
+        }
+        function is_in_us(lat, lng) {
+  // Define the API endpoint and parameters
+            const endpoint = 'https://maps.googleapis.com/maps/api/geocode/json';
+            const params = {
+                latlng: `${lat},${lng}`,
+                key: 'AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag',
+                result_type: 'country'
+            };
+            
+            // Send a synchronous request to the API endpoint and parse the response
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `${endpoint}?${new URLSearchParams(params)}`, false);
+            xhr.send();
+            const data = JSON.parse(xhr.responseText);
+            const country = data.results[0].address_components[0].short_name;
+            
+            // Check if the country is the United States
+            if (country === 'US') {
+                console.log('Coordinates are in the United States');
+                return true;
+            } else {
+                console.log('Coordinates are not in the United States');
+                return false;
+            }
+        }
+
     </script>
 {% endblock %}
