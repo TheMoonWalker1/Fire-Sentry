@@ -261,7 +261,17 @@ h4, .h4 {
   margin: 20px auto 15px auto;
 }
 
+::-webkit-scrollbar {
+  width: 4px;
+  height: 12px;
+  background-color: rgb(0,0,0,0.7);
+}
 
+/* Set the color of the scrollbar thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #ff8e43;
+  border-radius: 6px;
+}
 
 .projects-content {
   padding-top: 25vh;
