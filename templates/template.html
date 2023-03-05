@@ -36,13 +36,29 @@
         <div class="container">
             <div class="first-content">
                 <h1>Fire Sentry</h1>
-                <span>A <em>Wildfire</em> Prediction System</span>
+                <span class="auto-type"></span>
                 <div class="primary-button">
                     <a href="#services">Predict Now</a>
                 </div>
             </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script>
+        var typed = new Typed(".auto-type", {
+            strings: ["", "A <em>Wildfire</em> Prediction System"],
+            typeSpeed: 40,
+            backSpeed: 40,
+            loop: false,
+            onComplete: function() {
+                //bold the word Wildfire
+                // setTimeout(function() {
+                //     document.querySelector(".auto-type").innerHTML = document.querySelector(".auto-type").innerHTML.replace("Wildfire", "<em>Wildfire</em>");
+                // }, 100);
+                console.log("Typing animation complete");
+            }
+        });
+    </script>
 
 
     <div class="service-content" id="services">
