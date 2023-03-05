@@ -69,7 +69,7 @@
                     <div class="left-text">
                         <h4><b>How its Done</b></h4>
                         <div class="line-dec"></div>
-                        <p>Using Multi Layer Perceptron regression and Random Tree Classifier machine learning models, we were able to predict the
+                        <p>Using Multi Layer Perceptron (MLP) and Random Tree Classifier machine learning models, we were able to predict the
                         occurrence of wildfires across the United States. Find the data used for training and testing <b><a target="_blank" href="https://github.com/ouladsayadyounes/WildFires">here</a>!</b></p>
                         <ul>
                             <li>-  Approximately ~90% accuracy</li>
@@ -133,44 +133,6 @@
             </div>
         </div>
     </div>
-<script>
-    var counter = document.querySelector('.number-counter');
-    var start = 0;
-    var end = 70000;
-    var duration = 2000;
-    var range = end - start;
-    var current = start;
-    var increment = 123;
-    var step = Math.abs(Math.floor(duration / range));
-    var counterExecuted = false;
-
-    var options = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0
-    }
-
-    var observer = new IntersectionObserver(function(entries, observer) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting && !counterExecuted) {
-        counterExecuted = true;
-        var timer = setInterval(function() {
-            current += increment;
-            counter.innerHTML = current.toLocaleString();
-            if (current >= end) {
-            counter.innerHTML = end.toLocaleString();
-            clearInterval(timer);
-            }
-        }, step);
-        counter.style.opacity = 1;
-        counter.style.transform = 'translateY(0)';
-        }
-    });
-    }, options);
-
-    observer.observe(counter);
-
-</script>
 <div class="parallax-content contact-content" id="predict">
         <div class="container">
             <div class="row">
@@ -239,12 +201,18 @@
                     <div class="wrapper">
                     <section id="first-tab-group" class="tabgroup">
                       <div id="tab1">
+                          <p><img src="{% static 'img/ndvi.png' %}" alt="" style="opacity: .75;" height="250px"><br>
+                          It can be seen that the NDVI values for training range from 0 to 1 and are normalized. This normalization enables fair comparison between different datasets and prevents the influence of extreme values, simplifying the training process by making the input data consistent and easier to work with.
+                          </p>
                       </div>
                       <div id="tab2">
+                          <p><img src="{% static 'img/lst.png' %}" alt=""  style="opacity: .75;" height="250px"><br>LST stands for Land Surface Temperature. Our LST values for training range from 12000 to 16000 and are normalized, which means that the data is standardized to a common scale, making it easier for machine learning models to learn from and make accurate wildfire predictions.</p>
                       </div>
                       <div id="tab3">
+                          <p><img src="{% static 'img/ta.png' %}" alt=""  style="opacity: .75;" height="250px"><br>Our Thermal Anomaly (TA) values for training range from 3 to 5 and are right skewed, likely due to the fact that most areas do not have thermal anomalies, and this distribution may affect the performance of our model by overemphasizing the importance of areas with thermal anomalies and underemphasizing areas without them. Proper handling of this skewness is necessary for a balanced and accurate wildfire prediction model.</p>
                       </div>
                       <div id="tab4">
+                          <p><img src="{% static 'img/model_accuracy.png' %}" alt=""  style="opacity: .75;" height="250px"><br>Based on the graph above, it is apparent that the random forest classification model achieves the highest accuracy with 90% training data. Therefore, we can conclude that using 90% of the available training data is the best option for this model.</p>
                       </div>
                     </section>
                     <ul class="tabs clearfix" data-tabgroup="first-tab-group">
@@ -577,6 +545,45 @@
         function setthing() {
               document.getElementById("but").innerText = "Predict Now";
         }
+</script>
+
+<script>
+    var counter = document.querySelector('.number-counter');
+    var start = 0;
+    var end = 70000;
+    var duration = 2000;
+    var range = end - start;
+    var current = start;
+    var increment = 67;
+    var step = Math.abs(Math.floor(duration / range));
+    var counterExecuted = false;
+
+    var options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0
+    }
+
+    var observer = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !counterExecuted) {
+        counterExecuted = true;
+        var timer = setInterval(function() {
+            current += increment;
+            counter.innerHTML = current.toLocaleString();
+            if (current >= end) {
+            counter.innerHTML = end.toLocaleString();
+            clearInterval(timer);
+            }
+        }, step);
+        counter.style.opacity = 1;
+        counter.style.transform = 'translateY(0)';
+        }
+    });
+    }, options);
+
+    observer.observe(counter);
+
 </script>
 </body>
 </html>

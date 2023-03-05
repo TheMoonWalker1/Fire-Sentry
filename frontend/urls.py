@@ -3,5 +3,5 @@ from frontend import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('location', views.location, name='location')
+    # path('location', views.location, name='location')
 ]
