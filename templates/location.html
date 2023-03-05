@@ -108,7 +108,7 @@
             else{
                 console.log("Coordinates are not in US");
             }
-                
+
             };
         }
         function getCoordinates() {
@@ -149,8 +149,8 @@
             else{
                 console.log("Coordinates are not in US");
             }
-            
-            
+
+
         }
         function is_in_us(lat, lng) {
   // Define the API endpoint and parameters
@@ -160,14 +160,14 @@
                 key: 'AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag',
                 result_type: 'country'
             };
-            
+
             // Send a synchronous request to the API endpoint and parse the response
             const xhr = new XMLHttpRequest();
             xhr.open('GET', `${endpoint}?${new URLSearchParams(params)}`, false);
             xhr.send();
             const data = JSON.parse(xhr.responseText);
             const country = data.results[0].address_components[0].short_name;
-            
+
             // Check if the country is the United States
             if (country === 'US') {
                 console.log('Coordinates are in the United States');
