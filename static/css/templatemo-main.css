@@ -254,7 +254,9 @@ h4, .h4 {
 
 
 .projects-content {
-  padding-top: 20vh;
+  padding-top: 25vh;
+  /* background-repeat: no-repeat; */
+  background-size: cover;
   background-image: url(../img/3rd-section.jpg);
 }
 
