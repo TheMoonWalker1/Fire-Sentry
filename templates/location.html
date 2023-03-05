@@ -1,9 +1,7 @@
 {% extends "template.html" %}
-
+{% load static %}
 {% block css %}
-    <title>Google Places API Autocomplete Address Bar</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
-{% endblock %}
+    {% endblock %}
 
 {% block body %}
     <div class="container mt-5">
@@ -25,158 +23,14 @@
             <input id="Longitude" class="form-control" type="text" />
         </div>
         <button class="btn btn-primary" onclick="getCoordinates()">Get input Value</button>
-        <h2 class= "cointainer mt-5"> Result </h2>
+<!--        <h2 class= "cointainer mt-5"> Result </h2>-->
+        <p id="result"></p>
+        <img id="image">
     </div>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag&libraries=places"></script>
-    <script>
-        // Initialize the autocomplete object
-        var autocomplete = new google.maps.places.Autocomplete(
-            document.getElementById("autocomplete")
-        );
+<!--    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag&callback=initMap"></script>-->
+<script src="https://earthengine.google.com/client/api.js"></script>
 
-        function getInputValue() {
-            // Get the value of the autocomplete input element
-            var address = document.getElementById("autocomplete").value;
-            console.log("Input Value: " + address);
-            var coord_ns = 0;
-            var coord_ew = 0;
-            // Use the Geocoding API to convert the address to coordinates
-            var geocodingApiUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-            var address = address;
-            var apiKey = "AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag";
-
-            // Create a URL for the Geocoding API with the address and API key
-            var requestUrl = geocodingApiUrl + encodeURIComponent(address) + "&key=" + apiKey;
-
-            // Make a request to the Geocoding API using XMLHttpRequest
-            var request = new XMLHttpRequest();
-            request.open("GET", requestUrl);
-            request.responseType = "json";
-            request.send();
-
-            // Handle the response from the Geocoding API
-            request.onload = function() {
-            var response = request.response;
-
-            // Check if the Geocoding API returned a valid response
-            if (response.status === "OK") {
-                // Get the coordinates from the response
-                var location = response.results[0].geometry.location;
-                var latitude = location.lat;
-                var longitude = location.lng;
-                coord_ns = latitude;
-                coord_ew = longitude;
-
-                // Do something with the coordinates, like display them on a map
-                console.log("Latitude: " + latitude + ", Longitude: " + longitude);
-            } else {
-                console.log("Geocoding failed with status: " + response.status);
-            }
-            // preventing from page reload and default actions
-            // e.preventDefault();
-            // serialize the data for sending the form data.
-            // make POST ajax call
-            if (coord_ns == "" || coord_ew == "") {
-                console.log("Please enter coordinates");
-            }
-            if(is_in_us(latitude, longitude)){
-                console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
-            $.ajax({
-                type: 'POST',
-                url: "{% url 'predict' %}",
-                data: {coord_ns: coord_ns, coord_ew: coord_ew, csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success: function (response) {
-                    // on successfull creating object
-                    // 1. clear the form.
-                    $("#autocomplete").trigger('reset');
-                    // 2. focus to nickname input
-                    // $("#id_nick_name").focus();
-
-                    // display the newly friend to table.
-                    console.log(response);
-                    var prediction = JSON.parse(response["prediction"]);
-                    $("#result").innerHTML = prediction;
-
-                },
-                error: function (response) {
-                    // alert the error if any error occured
-                    $("#result").innerHTML = "Error Occurred, please try again";
-                }
-            })
-            }
-            else{
-                console.log("Coordinates are not in US");
-            }
-
-            };
-        }
-        function getCoordinates() {
-            var coord_ns = document.getElementById("Latitude").value;
-            var coord_ew = document.getElementById("Longitude").value;
-            if (coord_ns == "" || coord_ew == "") {
-                console.log("Please enter coordinates");
-            }
-            //check if coordinates are in US
-            var latitude = coord_ns;
-            var longitude = coord_ew;
-            console.log("Latitude: " + latitude + ", Longitude: " + longitude);
-            console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
-            if(is_in_us(latitude, longitude)){
-                $.ajax({
-                type: 'POST',
-                url: "{% url 'predict' %}",
-                data: {coord_ns: coord_ns, coord_ew: coord_ew, csrfmiddlewaretoken: '{{ csrf_token }}'},
-                success: function (response) {
-                    // on successfull creating object
-                    // 1. clear the form.
-                    $("#autocomplete").trigger('reset');
-                    // 2. focus to nickname input
-                    // $("#id_nick_name").focus();
-
-                    // display the newly friend to table.
-                    console.log(response);
-                    var prediction = JSON.parse(response["prediction"]);
-                    $("#result").innerHTML = prediction;
-
-                },
-                error: function (response) {
-                    // alert the error if any error occured
-                    $("#result").innerHTML = "Error Occurred, please try again";
-                }
-                })
-            }
-            else{
-                console.log("Coordinates are not in US");
-            }
-
-
-        }
-        function is_in_us(lat, lng) {
-  // Define the API endpoint and parameters
-            const endpoint = 'https://maps.googleapis.com/maps/api/geocode/json';
-            const params = {
-                latlng: `${lat},${lng}`,
-                key: 'AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag',
-                result_type: 'country'
-            };
-
-            // Send a synchronous request to the API endpoint and parse the response
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `${endpoint}?${new URLSearchParams(params)}`, false);
-            xhr.send();
-            const data = JSON.parse(xhr.responseText);
-            const country = data.results[0].address_components[0].short_name;
-
-            // Check if the country is the United States
-            if (country === 'US') {
-                console.log('Coordinates are in the United States');
-                return true;
-            } else {
-                console.log('Coordinates are not in the United States');
-                return false;
-            }
-        }
-
-    </script>
+<script src="{% static 'js/prediction.js' %}"></script>
 {% endblock %}
