@@ -197,7 +197,7 @@ a:hover { color: #ff7d27; }
 .service-content {
   padding-left: 15px;
   padding-right: 15px;
-  padding-top: 15vh;
+  padding-top: 12vh;
   background-image: url(../img/2nd-section.jpg);
   background-attachment: fixed;
   min-height: 100vh;

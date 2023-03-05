@@ -68,8 +68,8 @@
                     <div class="left-text">
                         <h4><b>How its Done</b></h4>
                         <div class="line-dec"></div>
-                        <p>Using both Logarithmic and Multi Layer Perceptron regression machine learning models, we were able to predict the
-                        occurrence of wildfires across the United States. Find the data used for training and testing <b><a target="_blank" href="https://archive.ics.uci.edu/ml/datasets/forest+fires">here</a>!</b></p>
+                        <p>Using Multi Layer Perceptron regression and Random Tree Classifier machine learning models, we were able to predict the
+                        occurrence of wildfires across the United States. Find the data used for training and testing <b><a target="_blank" href="https://github.com/ouladsayadyounes/WildFires">here</a>!</b></p>
                         <ul>
                             <li>-  Approximately ~90% accuracy</li>
                             <li>-  Low request latency</li>
@@ -142,7 +142,7 @@
                             <form id="contact" action="" method="post">
                                 <div class="row">
                                     <div class="thingmabob">
-                                        <h4><b>How its Done</b></h4>
+                                        <h4><b>Predict Wildfires At Any US Location!</b></h4>
                                     </div>
                                     <div class="col-md-12" style="padding-bottom: 5px">
                                       <fieldset style="padding-bottom: 5px">
@@ -176,9 +176,9 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="map" width="640px" height="467px">
+                    <div class="map" >
                     <div class="thingmabob">
-                        <h4><b id="predicty" style="color: #ff7d27">Result:</b></h4>
+                        <h4><b id="predicty" style="color: #ff7d27">Result Appears Here</b></h4>
                     </div>
                     <!-- How to change your own map point
                            1. Go to Google Maps
@@ -187,7 +187,7 @@
                            4. Copy only URL and paste it within the src="" field below
                     -->
 
-                        <img id="image" >
+                        <img id="image" src="https://maps.googleapis.com/maps/api/staticmap?center=37.09024,-95.712891&zoom=4&size=640x467&maptype=satellite&key=AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag" height="382px">
                     </div>
                 </div>
             </div>
@@ -412,7 +412,7 @@
         function getInputValue() {
             // Get the value of the autocomplete input element
             var address = document.getElementById("autocomplete").value;
-            console.log("Input Value: " + address);
+            // console.log("Input Value: " + address);
             var coord_ns = 0;
             var coord_ew = 0;
             // Use the Geocoding API to convert the address to coordinates
@@ -443,24 +443,28 @@
                 coord_ew = longitude;
 
                 // Do something with the coordinates, like display them on a map
-                console.log("Latitude: " + latitude + ", Longitude: " + longitude);
+                // console.log("Latitude: " + latitude + ", Longitude: " + longitude);
             } else {
-                console.log("Geocoding failed with status: " + response.status);
+                document.getElementById('but').innerHTML = "<em style='color: #930e0e;'>Geocoding Failed</em> - Please Try Again"
+                // console.log("Geocoding failed with status: " + response.status);
             }
             // preventing from page reload and default actions
             // e.preventDefault();
             // serialize the data for sending the form data.
             // make POST ajax call
-            if (coord_ns == "" || coord_ew == "") {
-                console.log("Please enter coordinates");
-            }
+            // if (coord_ns == "" || coord_ew == "") {
+            //     // console.log("Please enter coordinates");
+            // }
             if(is_in_us(latitude, longitude)){
                 // console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
                 ajax_requet(coord_ns, coord_ew);
             }
             else{
-                console.log("Coordinates are not in US");
+                // console.log("Coordinates are not in US");
+
+                document.getElementById('but').innerHTML = "<em style='color: #930e0e;'>Location Not In USA</em> - Please Try Again"
             }
+
 
             };
         }
@@ -468,18 +472,17 @@
             var coord_ns = document.getElementById("Latitude").value;
             var coord_ew = document.getElementById("Longitude").value;
             if (coord_ns == "" || coord_ew == "") {
-                console.log("Please enter coordinates");
-            }
-            //check if coordinates are in US
-            var latitude = coord_ns;
-            var longitude = coord_ew;
-            console.log("Latitude: " + latitude + ", Longitude: " + longitude);
-            console.log(document.querySelector('input[name="csrfmiddlewaretoken"]').value);
-            if(is_in_us(latitude, longitude)){
-                ajax_requet(latitude, longitude);
-            }
-            else{
-                console.log("Coordinates are not in US");
+
+                document.getElementById('but').innerHTML = "<em style='color: #930e0e;'>Please Enter Location</em> - Please Try Again"
+            } else {
+                //check if coordinates are in US
+                var latitude = coord_ns;
+                var longitude = coord_ew;
+                if (is_in_us(latitude, longitude)) {
+                    ajax_requet(latitude, longitude);
+                } else {
+                    document.getElementById('but').innerHTML = "<em style='color: #930e0e;'>Location Not In USA</em> - Please Try Again"
+                }
             }
 
 
@@ -499,7 +502,6 @@
                     // $("#id_nick_name").focus();
 
                     // display the newly friend to table.
-                    console.log(response);
                     var prediction = JSON.parse(response["prediction"]);
                     // document.getElementById("result").innerHTML = prediction;
 
@@ -511,7 +513,6 @@
 
                     const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=14&size=640x467&maptype=satellite&key=${apiKey}`;
 
-                    console.log("Map URL:", mapUrl);
 
                     document.getElementById('image').src = mapUrl;
                     document.getElementById("predicty").innerText = (prediction * 100) + "% chance of Wildfire";
@@ -549,10 +550,9 @@
 
             // Check if the country is the United States
             if (country === 'US') {
-                console.log('Coordinates are in the United States');
                 return true;
             } else {
-                console.log('Coordinates are not in the United States');
+                document.getElementById('but').innerHTML = "<em style='color: #930e0e;'>Location Not In USA</em> - Please Try Again"
                 return false;
             }
         }
