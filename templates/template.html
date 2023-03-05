@@ -88,7 +88,7 @@
                                 <h4>Approximately</h4>
                                 <div class="line-dec"></div>
                                 <br>
-                                <b><p style="font-size:70px;">70,000</p></b>
+                                <b><p class = "number-counter" style="font-size:70px;">70,000</p></b>
                                 <br>
                                 <div class="line-dec"></div>
                                 <h4>Wildfires Per Year</h4>
@@ -132,7 +132,44 @@
             </div>
         </div>
     </div>
+<script>
+    var counter = document.querySelector('.number-counter');
+    var start = 0;
+    var end = 70000;
+    var duration = 2000;
+    var range = end - start;
+    var current = start;
+    var increment = 123;
+    var step = Math.abs(Math.floor(duration / range));
+    var counterExecuted = false;
 
+    var options = {
+    root: null,
+    rootMargin: '0px',
+    threshold: 0
+    }
+
+    var observer = new IntersectionObserver(function(entries, observer) {
+    entries.forEach(entry => {
+        if (entry.isIntersecting && !counterExecuted) {
+        counterExecuted = true;
+        var timer = setInterval(function() {
+            current += increment;
+            counter.innerHTML = current.toLocaleString();
+            if (current >= end) {
+            counter.innerHTML = end.toLocaleString();
+            clearInterval(timer);
+            }
+        }, step);
+        counter.style.opacity = 1;
+        counter.style.transform = 'translateY(0)';
+        }
+    });
+    }, options);
+
+    observer.observe(counter);
+
+</script>
 <div class="parallax-content contact-content" id="predict">
         <div class="container">
             <div class="row">
