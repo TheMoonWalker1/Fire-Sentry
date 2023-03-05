@@ -25,10 +25,10 @@
 <div class="fixed-side-navbar">
         <ul class="nav flex-column">
             <li class="nav-item"><a class="nav-link" href="#home"><span>Intro</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="#services"><span>Services</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="#portfolio"><span>Portfolio</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="#our-story"><span>Our Story</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="#contact-us"><span>Contact Us</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#model"><span>The Model</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#predict"><span>Predict</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#data"><span>Data</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#wildfires"><span>Current Wildfires</span></a></li>
         </ul>
     </div>
 
@@ -38,7 +38,7 @@
                 <h1>Fire Sentry</h1>
                 <span class="auto-type"></span>
                 <div class="primary-button">
-                    <a href="#services">Predict Now</a>
+                    <a href="#model">Predict Now</a>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@
     </script>
 
 
-    <div class="service-content" id="services">
+    <div class="service-content" id="model">
         <div class="container">
             <div class="row">
                 <div class="col-md-4">
@@ -133,7 +133,7 @@
         </div>
     </div>
 
-<div class="parallax-content contact-content" id="contact-us">
+<div class="parallax-content contact-content" id="predict">
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -141,6 +141,9 @@
                         <div class="row">
                             <form id="contact" action="" method="post">
                                 <div class="row">
+                                    <div class="thingmabob">
+                                        <h4><b>How its Done</b></h4>
+                                    </div>
                                     <div class="col-md-12" style="padding-bottom: 5px">
                                       <fieldset style="padding-bottom: 5px">
                                         {% csrf_token %}
@@ -173,7 +176,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="map">
+                    <div class="map" width="640px" height="467px">
+                    <div class="thingmabob">
+                        <h4><b id="predicty" style="color: #ff7d27">Result:</b></h4>
+                    </div>
                     <!-- How to change your own map point
                            1. Go to Google Maps
                            2. Click on your location point
@@ -181,14 +187,14 @@
                            4. Copy only URL and paste it within the src="" field below
                     -->
 
-                        <img id="image">
+                        <img id="image" >
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="tabs-content" id="our-story">
+    <div class="tabs-content" id="data">
         <div class="container">
             <div class="row">
                 <div class="col-md-8 mx-auto">
@@ -223,7 +229,7 @@
         </div>
     </div>
 
-    <div class="parallax-content projects-content" id="portfolio">
+    <div class="parallax-content projects-content" id="wildfires">
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
@@ -505,7 +511,9 @@
                     console.log("Map URL:", mapUrl);
 
                     document.getElementById('image').src = mapUrl;
-                    document.getElementById("but").innerText = (prediction * 100) + "% chance of Wildfire.";
+                    document.getElementById("predicty").innerText = (prediction * 100) + "% chance of Wildfire";
+
+                    document.getElementById("but").innerText = "Predict Now";
                     document.getElementById("but").disabled = false;
 
 
