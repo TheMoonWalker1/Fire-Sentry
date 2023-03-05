@@ -145,7 +145,7 @@
                                       <fieldset style="padding-bottom: 5px">
                                         {% csrf_token %}
 <!--                                        <label for="autocomplete">Enter your address:</label>-->
-                                        <input id="autocomplete" class="form-control" type="text" placeholder="Enter your address:"/>
+                                        <input id="autocomplete" class="form-control" type="text" placeholder="Enter your address:" onchange="setthing()"/>
                                       </fieldset>
                                     </div>
                                     <div class="col-md-12 or" style="padding-bottom: 5px">
@@ -156,14 +156,14 @@
                                     <div class="col-md-12">
                                       <fieldset>
 <!--                                        <label for="Latitude">Latitude:</label>-->
-                                        <input id="Latitude" class="form-control" type="text" placeholder="Latitude:"/>
+                                        <input id="Latitude" class="form-control" type="text" placeholder="Latitude:" onchange="setthing()"/>
 <!--                                        <label for="Longitude">Longitude:</label>-->
-                                        <input id="Longitude" class="form-control" type="text" placeholder="Longitude:"/>
+                                        <input id="Longitude" class="form-control" type="text" placeholder="Longitude:" onchange="setthing()"/>
                                       </fieldset>
                                     </div>
                                     <div class="col-md-12">
                                       <fieldset>
-                                        <button class="btn btn-primary" type="button" onclick="find()">Get input Value</button>
+                                        <button class="btn btn-primary" type="button" onclick="find()" id="but">Predict Now</button>
                                           <p id="result" temp="{% url 'predict' %}"></p>
                                       </fieldset>
                                     </div>
@@ -394,10 +394,10 @@
           });
 
           function find() {
-              if (document.getElementById("autocomplete").value === ""){
-                  getCoordinates();
-              } else {
+              if (document.getElementById("autocomplete").value !== ""){
                   getInputValue();
+              } else {
+                  getCoordinates();
               }
           }
         function getInputValue() {
@@ -483,14 +483,16 @@
                 success: function (response) {
                     // on successfull creating object
                     // 1. clear the form.
-                    $("#autocomplete").trigger('reset');
+                    // document.getElementById("autocomplete").trigger('reset');
+                    // document.getElementById("Latitude").trigger('reset');
+                    // document.getElementById("Longitude").trigger('reset');
                     // 2. focus to nickname input
                     // $("#id_nick_name").focus();
 
                     // display the newly friend to table.
                     console.log(response);
                     var prediction = JSON.parse(response["prediction"]);
-                    document.getElementById("result").innerHTML = prediction;
+                    // document.getElementById("result").innerHTML = prediction;
 
                     const latitude = coord_ns; // replace with the latitude of the coordinate
                     const longitude = coord_ew; // replace with the longitude of the coordinate
@@ -498,11 +500,13 @@
 
                     // const apiKey = "YOUR_API_KEY"; // replace with your Google API key
 
-                    const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=14&size=640x640&maptype=satellite&key=${apiKey}`;
+                    const mapUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${latitude},${longitude}&zoom=14&size=640x467&maptype=satellite&key=${apiKey}`;
 
                     console.log("Map URL:", mapUrl);
 
-                    document.getElementById('image').src = mapUrl
+                    document.getElementById('image').src = mapUrl;
+                    document.getElementById("but").innerText = (prediction * 100) + "% chance of Wildfire.";
+                    document.getElementById("but").disabled = false;
 
 
                 },
@@ -510,7 +514,11 @@
                     // alert the error if any error occured
                     document.getElementById("result").innerHTML = "Error Occurred, please try again";
                 }
-                })
+                });
+
+                document.getElementById("but").innerText = "Loading, Please Wait";
+                document.getElementById("but").disabled = true;
+
         }
         function is_in_us(lat, lng) {
   // Define the API endpoint and parameters
@@ -536,6 +544,11 @@
                 console.log('Coordinates are not in the United States');
                 return false;
             }
+        }
+
+
+        function setthing() {
+              document.getElementById("but").innerText = "Predict Now";
         }
 </script>
 </body>
