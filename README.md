@@ -16,7 +16,7 @@ You can start typing any address into the Address Bar and it will bring up the a
 
 ## How we built it
 
-We used Django and a plethora of APIs from many different providers. It also includes a inhumane amount of css and js making the website a smooth experience for the user.
+We used Django and a many of Google's APIs. It also includes a inhumane amount of CSS and JavaScript making the website a smooth experience for the user.
 
 ## Challenges we ran into
 
@@ -43,3 +43,7 @@ Contributed to the larger effort of preventing and minimizing the impact of wild
 **Global Coverage:** We want to be able to create a model that covers more than just the United States
 
 **Real-Time Threat Alerts:** We want to be able to create real-time threat alerts for people in high-risk areas when a wildfire starts.
+
+### Other Links
+
+**Devpost:** [https://devpost.com/software/fire-sentry](https://devpost.com/software/fire-sentry)
