@@ -187,7 +187,7 @@
                            4. Copy only URL and paste it within the src="" field below
                     -->
 
-                        <img id="image" src="https://maps.googleapis.com/maps/api/staticmap?center=37.09024,-95.712891&zoom=4&size=640x467&maptype=satellite&key=AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag" height="382px">
+                        <img id="image" src="https://maps.googleapis.com/maps/api/staticmap?center=37.09024,-95.712891&zoom=4&size=640x467&maptype=satellite&key=API_KEY_HERE" height="382px">
                     </div>
                 </div>
             </div>
@@ -377,7 +377,7 @@
           });
         });
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag&libraries=places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY_HERE&libraries=places"></script>
 
 <script src="{% static 'js/prediction.js' %}"></script>
 <script>
@@ -402,7 +402,7 @@
             // Use the Geocoding API to convert the address to coordinates
             var geocodingApiUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=";
             var address = address;
-            var apiKey = "AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag";
+            var apiKey = "API_KEY_HERE";
 
             // Create a URL for the Geocoding API with the address and API key
             var requestUrl = geocodingApiUrl + encodeURIComponent(address) + "&key=" + apiKey;
@@ -491,7 +491,7 @@
 
                     const latitude = coord_ns; // replace with the latitude of the coordinate
                     const longitude = coord_ew; // replace with the longitude of the coordinate
-                    const apiKey = 'AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag'; // replace with your Google Earth Engine API key
+                    const apiKey = 'API_KEY_HERE'; // replace with your Google Earth Engine API key
 
                     // const apiKey = "YOUR_API_KEY"; // replace with your Google API key
 
@@ -521,7 +521,7 @@
             const endpoint = 'https://maps.googleapis.com/maps/api/geocode/json';
             const params = {
                 latlng: `${lat},${lng}`,
-                key: 'AIzaSyCv65Fd_RQnwhQuzKAS30JF6DXASmJOuag',
+                key: 'API_KEY_HERE',
                 result_type: 'country'
             };
 
